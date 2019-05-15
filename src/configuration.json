@@ -1,0 +1,12 @@
+{
+  "serverStart": {
+    "default": {
+      "mongoServer": {
+        "ip" : "mongodb://127.0.0.1/digital-jockey"
+      },
+      "httpServer": {
+        "port":3000
+      }
+    }
+  }
+}

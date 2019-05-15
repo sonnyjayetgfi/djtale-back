@@ -1,0 +1,21 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ./src/app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "sonny",
+  "license": "ISC",
+  "dependencies": {
+    "@types/socket.io": "^2.1.2",
+    "bcrypt-nodejs": "0.0.3",
+    "cors": "^2.8.5",
+    "express": "^4.16.4",
+    "mongodb": "^3.2.3",
+    "mongoose": "^5.5.4",
+    "socket.io": "^2.2.0"
+  }
+}
