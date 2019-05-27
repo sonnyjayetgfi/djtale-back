@@ -7,10 +7,12 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const configuration = require('./configuration');
 const httpServer = require('./httpServer');
-
+const jsonWebToken = require('./Services/jsonwebtoken');
+const userService = require('./Mongo/Services/UserService');
 // routes
 const authRoutes = require('./Routes/auth');
 const playlistRoutes = require('./Routes/playlist');
+const userRoutes = require('./Routes/user');
 
 const app = express();
 app.use(bodyParser.json({ limit: '5mb' }));
@@ -30,12 +32,40 @@ mongoose.connect(envConfiguration.mongoServer.ip)
 
 // Http Server
 httpServer.start(app, envConfiguration);
+
+// JWT Check
+app.use('/', (req, res, next) => {
+  if(req.path === '/auth/login' || req.path === '/auth/register'){
+    return next();
+  } else {
+    if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
+      const jwt = req.headers.authorization.split(' ')[1];
+      const decodedToken = jsonWebToken.decodeToken(jwt);    
+      userService.getUserByCriterias({identity: decodedToken.userId})
+      .then((user) => {
+        req.user = user;
+        next();
+      })
+      .catch((error) =>{
+        return res.status(500).json({
+          codeMessage : 'InternalError',
+          statusCode : 500,
+          error: error
+        });
+      })
+    } else {
+      return res.status(403).json({
+        codeMessage : 'UnauthorizedRequestInvalidToken',
+        statusCode : 403
+      });
+    }   
+  }
+})
 app.use('/auth', authRoutes);
 app.use('/playlist', playlistRoutes);
-// app.use('/', (req, res) => {
-//   console.log(req.body);
-//   res.status(200).send('Sonny');
-// })
+app.use('/user', userRoutes);
+
+
 
 // Socket Server
 

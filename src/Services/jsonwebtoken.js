@@ -6,6 +6,10 @@ module.exports  = {
         return jwt.sign({ userId }, secret, {
             expiresIn: '24h'
         });
+    },
+    
+    decodeToken: (token) => {
+        return jwt.decode(token);
     }
 }
 
