@@ -6,6 +6,7 @@ const UserSchema = new mongoose.Schema({
   pseudo : String,
   creationDate: Date,
   statistics: Object,
+  identity : String
 });
 
 module.exports = mongoose.model('User', UserSchema);
