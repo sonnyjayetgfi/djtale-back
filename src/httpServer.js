@@ -8,11 +8,11 @@ const http = require('http');
 httpServer = {};
 
 httpServer.start = (app, configuration) => {
-  const httpPort = configuration.httpServer.port;
-  app.set('port', httpPort);
+  httpServer.httpPort = configuration.httpServer.port;
+  app.set('port', httpServer.httpPort);
 
   httpServer.server = http.createServer(app);
-  httpServer.server.listen(httpPort);
+  httpServer.server.listen(httpServer.httpPort, '0.0.0.0');
   httpServer.server.on('error', onError);
   httpServer.server.on('listening', onListening);
 }
@@ -22,7 +22,7 @@ onError = (error) => {
     throw error;
   }
 
-  const bind = typeof port === 'string' ? `Pipe ${port}` : `Port ${port}`;
+  const bind = typeof httpServer.httpPort === 'string' ? `Pipe ${httpServer.httpPort}` : `Port ${httpServer.httpPort}`;
 
   // handle specific listen errors with friendly messages
   switch (error.code) {

@@ -5,7 +5,7 @@
         "ip" : "mongodb://127.0.0.1/digital-jockey"
       },
       "httpServer": {
-        "port":3000
+        "port":3333
       }
     },
     "local": {
@@ -13,7 +13,7 @@
         "ip" : "mongodb://127.0.0.1/digital-jockey"
       },
       "httpServer": {
-        "port":3000
+        "port":3333
       }
     }
   },

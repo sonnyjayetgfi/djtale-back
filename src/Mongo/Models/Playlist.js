@@ -4,6 +4,7 @@ const Schema = mongoose.Schema;
 
 const playlistSchema = new mongoose.Schema({
   userId: String,
+  roomId: String,
   name: String,
   playlistByDefault: Boolean,
   songs : [{type: Schema.Types.ObjectId, ref:'Song'}],

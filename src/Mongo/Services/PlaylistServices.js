@@ -60,9 +60,9 @@ PlaylistService.addSongToPlayList = (userId, form, playlistId) => {
 
 }
 
-PlaylistService.createPlaylist = (userId, playlistName) => {
+PlaylistService.createPlaylist = (obj, playlistName) => {
   return new Promise((resolve, reject) => {
-    PlaylistService.getPlaylistByCriterias({ userId })
+    PlaylistService.getPlaylistByCriterias(obj)
       .then(async (response) => {
         const nameUsed = await response.filter(a => a.name === playlistName).length > 0 ? true : false;
         if (nameUsed) {
@@ -70,8 +70,8 @@ PlaylistService.createPlaylist = (userId, playlistName) => {
         } else {
           Playlist.create({
             name: playlistName,
-            userId: userId,
             playlistByDefault: response.length > 0 ? false : true,
+            ...obj
           }, (err, result) => {
             if (err) {
               reject(err);
