@@ -72,7 +72,7 @@ router.get('/getById', (req,res) => {
 });
 
 
-router.post('/addSongToCurrentPlaylist', (req, res) => {
+// router.post('/addSongToCurrentPlaylist', (req, res) => {
     
-})
+// })
 module.exports = router;

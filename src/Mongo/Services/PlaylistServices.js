@@ -21,9 +21,9 @@ PlaylistService.getPlaylistByCriterias = (criterias) => {
   });
 };
 
-PlaylistService.addSongToPlayList = (userId, form, playlistId) => {
+PlaylistService.addSongToPlayList = (form, playlistId) => {
   return new Promise((resolve, reject) => {
-    PlaylistService.getPlaylistByCriterias({ _id: playlistId, userId: userId })
+    PlaylistService.getPlaylistByCriterias({ _id: playlistId })
       .then((playlistList) => {
         if (!playlistList.length) {
           reject('No playlist');
@@ -149,76 +149,9 @@ PlaylistService.updateSongPriority = (userId, playlistId, songId, newPriority) =
               resolve(res2);
             })
           });
-        } else {
-          console.log(currentPriority)
-          console.log(newPriority)
         }
       })
   });
 }
-
-
-
-
-// PlaylistService.updateSongPriority = (userId, playlistId, songId, direction) => {
-//   return new Promise((resolve, reject) => {
-//     console.log(userId)
-//     console.log(playlistId)
-//     PlaylistService.getPlaylistByCriterias({ userId, _id: playlistId })
-//       .then((playlistList) => {
-//         console.log(playlistList)
-//         if (playlistList.length == 0) {
-//           reject('No playlist');
-//         }
-//         let playList = playlistList[0];
-//         let songs = playList.songs;
-//         let targetSong = songs.filter(a => a._id == songId);
-//         if (direction == -1 || direction == 1) {
-//           let switchedSong = songs.filter(a => a.priority == targetSong.priority + direction);
-//           switchedSong.priority += 1;
-//           targetSong.priority -= 1;
-//           PlaylistService.updateSong(switchedSong).then(() => {
-//             PlaylistService.updateSong(targetSong).then(() => {
-//               resolve();
-//             })
-//               .catch((error) => {
-//                 reject(error);
-//               });
-//           })
-//             .catch((error) => {
-//               reject(error);
-//             });
-//           // targetSong.save()
-//           // async.parallel([targetSong.save, switchedSong.save], (err, responses) => {
-//           //   if (err) {
-//           //     reject(err);
-//           //   }
-//           //   resolve(responses);
-//           // });
-//         } else if (direction == 'start') {
-//           songs.forEach((song) => {
-//             if (song.priority < targetSong.priority) {
-//               song.priority += 1;
-//             }
-//             if (song._id == targetSong._id) {
-//               song.priority = 0;
-//             }
-//           });
-//           songs.save((err, res) => {
-//             if (err) {
-//               reject(err);
-//             }
-//             resolve(res);
-//           });
-//         } else {
-//           reject('Invalid direction');
-//         }
-//       })
-//       .catch((error) => {
-//         reject(error);
-//       });
-//   });
-// };
-
 
 module.exports = PlaylistService;

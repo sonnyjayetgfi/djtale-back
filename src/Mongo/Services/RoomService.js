@@ -1,7 +1,16 @@
 const Room = require('../Models/Room');
 const PlaylistService = require('../Services/PlaylistServices');
+const Playlist = require('../Models/Playlist');
+const Song = require('../Models/Song');
 
-module.exports = {
+const RoomService = {
+
+    getAllRoomsWithCurrentSong: () => {
+        return new Promise((resolve, reject) => {
+
+        })
+    },
+
     getAll: () => {
         return new Promise((resolve, reject) => {
             Room.find({}, (err, rooms) => {
@@ -22,21 +31,21 @@ module.exports = {
                 if (err) {
                     reject(err);
                 }
-                PlaylistService.createPlaylist({roomId: res._id}, 'default_playlist')
-                .then((playlist) => {
-                    res.playlist = playlist._id;
-                    res.save((error,result) => {
-                        if(error) {
-                            reject(error);
-                        }
-                        resolve({res, playlist});
+                PlaylistService.createPlaylist({ roomId: res._id }, 'default_playlist')
+                    .then((playlist) => {
+                        res.playlist = playlist._id;
+                        res.save((error, result) => {
+                            if (error) {
+                                reject(error);
+                            }
+                            resolve({ res, playlist });
+                        })
+
                     })
-                    
-                })
-                .catch((error) => {
-                    reject(error);
-                })
-                
+                    .catch((error) => {
+                        reject(error);
+                    })
+
             });
         })
     },
@@ -47,8 +56,37 @@ module.exports = {
                 if (err) {
                     reject(err)
                 }
-                resolve(room);
+                Playlist.populate(room, {
+                    'path': "playlist.songs",
+                    select: 'name',
+                    model: Song
+                }, (error, result) => {
+                    if (error) {
+                        reject(error);
+                    }
+                    resolve(result)
+                })
             })
+        })
+    },
+
+    addSongToRoomPlaylist: (roomId, song) => {
+        return new Promise((resolve, reject) => {
+            RoomService.getRoomById(roomId)
+                .then((room) => {
+                    PlaylistService.addSongToPlayList(song, room.playlist._id)
+                        .then((response) => {
+                            resolve(response);
+                        })
+                        .catch((error) => {
+                            reject(error);
+                        })
+                })
+                .catch((error) => {
+                    reject(error);
+                });
         })
     }
 };
+
+module.exports = RoomService;
